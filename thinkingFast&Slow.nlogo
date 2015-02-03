@@ -1,3 +1,4 @@
+; This is all just comments to test out git
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
