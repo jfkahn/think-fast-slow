@@ -1,13 +1,78 @@
 ; This is all just comments to test out git
+
+
+to think-fast
+  reset-timer
+  loop [every 1 [
+     output-print time-left 20
+     beep
+     if timer < 20[
+    ask-easy-question
+  ]
+    ]]
+
+  stop
+end
+
+;to think-slow
+;   ask-hard-question
+;   ;start-timer
+;   ;start-beeping
+;   ;reset
+;end
+
+
+
+
+;;;;HELPER FUNCTIONS;;;;;
+
+to-report time-left [duration]
+  report round (duration - timer)
+end
+  
+
+to start-beeping
+  
+end
+
+;;This just normalizes everything to that person's normal stress levels
+to calibrate
+  
+end
+
+to ask-easy-question
+  let answer user-input (word "What is" easy-number "+" easy-number)
+end
+
+to-report easy-number
+let init-times 0
+ifelse init-times =  0
+[ set init-times init-times + 1
+  report 1]
+[report 1 + init-times]
+end
+
+;to ask-hard-question
+;  let answer user-input (word "What is" hard-number "- 13") 
+;  if answer = false and time-left [start-over]
+;
+;end
+
+to-report hard-number
+end
+
+
+to start-over
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
-210
-10
-649
-470
+667
+29
+912
+233
 16
 16
-13.0
+5.242424242424242
 1
 10
 1
@@ -27,10 +92,115 @@ GRAPHICS-WINDOW
 ticks
 30.0
 
+TEXTBOX
+45
+20
+450
+44
+EXPLORE DIFFERENT TYPES OF THINKING
+20
+0.0
+1
+
+BUTTON
+40
+201
+154
+234
+Fast Thinking
+think-fast
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+40
+257
+157
+290
+Slow Thinking
+think-slow
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+PLOT
+344
+59
+680
+330
+Current Stress
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"set-plot-pen-mode 1" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count turtles"
+
+PLOT
+7
+390
+676
+540
+Stress Over Time
+time
+stress
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count turtles"
+
+BUTTON
+22
+104
+203
+137
+Calibrate Stress Reading
+calibrate
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+OUTPUT
+172
+185
+284
+259
+30
+
 @#$#@#$#@
 ## WHAT IS IT?
+Thinking Fast and Slow is trying to give an experiential way to expereince two different modes of thinking: Fast thinking and Slow Thinking. Fast and Slow thinking is based off of the popularization of two systems of thinking popularized by Daniel Kahneman in his book "Thinking Fast and Slow".
 
-(a general understanding of what the model is trying to show or explain)
+The model
 
 ## HOW IT WORKS
 
