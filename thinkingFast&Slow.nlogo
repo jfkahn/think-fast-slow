@@ -1,31 +1,19 @@
-; This is all just comments to test out git
-;to think-fast
-;  reset-timer ;this resets the timer to 0
-;  
-;  ;Every second I want to beep and output the timer to the time
-;  loop [every 1 [
-;     output-print time-left 20
-;     beep
-;     if timer < 20[
-;    ask-easy-question
-;  ]
-;    ]]
-;
-;  stop
-;end
+extensions [gogo]
+
 globals [
   increment-easy ;how many times easy number has been called
   increment-hard ;how many times hard number has been called
   random1 ;first random number
   random2 ;second random number
   count-correct ;number of correct responses
+  stress ; raw reading from input 1
   ]
 to setup
   set increment-easy 0
   set increment-hard 0
   set count-correct 0
   crt 100
-
+  set stress item 0 gogo:read-sensors
 end
 
 ;not sure how to get user input while still maintaining the clock beeps
@@ -37,7 +25,7 @@ to think-fast
   while [timer < 20] [
       every 1 [output-print time-left 20 beep]
       check-easy-answer
-      ask turtles [rt random 60 fd 3] ; TODO: Vary turtle movement using sensor value
+      ask turtles [rt random (stress / 1024) * 100 fd 3] ; TODO: Vary turtle movement using sensor value
   ]
   print "ALL DONE WITH THINKING FAST. NOW TRY SLOW!"
 end
@@ -65,13 +53,10 @@ to-report time-left [duration]
 end
   
 
-to start-beeping
-  
-end
 
 ;;This just normalizes everything to that person's normal stress levels
 to calibrate
-  
+  set stress item 0 gogo:read-sensors
 end
 
 to ask-easy-question
@@ -102,20 +87,6 @@ end
 
 to check-hard-answer
  if ((random1 + random2) = answer) [ask-hard-question set count-correct count-correct + 1]
-end
-
-;to ask-hard-question
-;  let answer user-input (word "What is" hard-number "- 13") 
-;  if answer = false and time-left [start-over]
-;
-;end
-
-to-report hard-number
-  
-end
-
-
-to start-over
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -205,7 +176,7 @@ true
 false
 "set-plot-pen-mode 1" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot count turtles"
+"default" 1.0 0 -16777216 true "" "plot stress"
 
 PLOT
 7
@@ -223,7 +194,7 @@ true
 false
 "" ""
 PENS
-"default" 1.0 0 -16777216 true "" "plot count turtles"
+"default" 1.0 0 -16777216 true "" "plotxy timer stress"
 
 BUTTON
 22
@@ -232,7 +203,7 @@ BUTTON
 137
 Calibrate Stress Reading
 calibrate
-NIL
+T
 1
 T
 OBSERVER
@@ -255,7 +226,7 @@ INPUTBOX
 136
 373
 prompt
-What is 3+2?
+What is 29+49?
 1
 0
 String
@@ -266,7 +237,7 @@ INPUTBOX
 257
 372
 answer
-60
+20
 1
 0
 Number
@@ -279,6 +250,17 @@ MONITOR
 # Correct
 number-correct
 0
+1
+11
+
+MONITOR
+439
+337
+496
+382
+NIL
+stress
+17
 1
 11
 
