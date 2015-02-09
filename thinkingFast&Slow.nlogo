@@ -1,25 +1,40 @@
 ; This is all just comments to test out git
-
-
-to think-fast
-  reset-timer
-  loop [every 1 [
-     output-print time-left 20
-     beep
-     if timer < 20[
-    ask-easy-question
+;to think-fast
+;  reset-timer ;this resets the timer to 0
+;  
+;  ;Every second I want to beep and output the timer to the time
+;  loop [every 1 [
+;     output-print time-left 20
+;     beep
+;     if timer < 20[
+;    ask-easy-question
+;  ]
+;    ]]
+;
+;  stop
+;end
+globals [
+  increment-easy ;how many times easy number has been called
   ]
-    ]]
-
-  stop
+to setup
+  set increment-easy 0
 end
 
-;to think-slow
-;   ask-hard-question
-;   ;start-timer
-;   ;start-beeping
-;   ;reset
-;end
+;not sure how to get user input while still maintaining the clock beeps
+to think-fast
+  setup
+  reset-timer
+  ; every second there is a beep and the time-left is updated.
+  while [timer < 20] [
+      every 1 [output-print time-left 20 beep]
+      ask-easy-question
+  ]
+  print "ALL DONE WITH THINKING SLOW. NOW TRY FAST!"
+end
+
+
+
+
 
 
 
@@ -41,15 +56,13 @@ to calibrate
 end
 
 to ask-easy-question
-  let answer user-input (word "What is" easy-number "+" easy-number)
+  set increment-easy increment-easy + 1
+  let answer read-from-string user-input (word "What is " 1 "+ " easy-number) ;sets answer local variable to a number that the user input
+  ifelse answer =  1 + easy-number [show "CORRECT"] [show "INCORRECT"]
 end
 
 to-report easy-number
-let init-times 0
-ifelse init-times =  0
-[ set init-times init-times + 1
-  report 1]
-[report 1 + init-times]
+  report 1 + increment-easy
 end
 
 ;to ask-hard-question
@@ -66,10 +79,10 @@ to start-over
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-667
-29
-912
-233
+558
+10
+803
+214
 16
 16
 5.242424242424242
@@ -190,10 +203,10 @@ NIL
 1
 
 OUTPUT
-172
-185
-284
-259
+220
+94
+332
+168
 30
 
 @#$#@#$#@
@@ -204,21 +217,32 @@ The model
 
 ## HOW IT WORKS
 
-(what rules the agents use to create the overall behavior of the model)
+This model makes use of the gogoboard and the soil humiditiy sensor to sense the conductivity on your skin also called electrodermal response. You might also find this measurment called Galvanic Skin Response (GSR). It works because human skin temporarily becomes a much better conductor of electricity when you become aroused. Arousal is a gernal term that can occur when you expereince some as difficult, scary, etc. When we become aroused humans release a little bit of sweat especially in the palms which the soil humidity sensor picks up on.
+
+This model currently doesn't use agents to function althought it could be a useful extension. 
 
 ## HOW TO USE IT
 
-(how to use the model, including a description of each of the items in the Interface tab)
+There a few steps you should follow to see your stress response under different types of mental activation.
+
+1. Calibrate your stress reading
+2. Click the fast thinking button.  Were there any changes?
+3. Click the slow thinking button. How about now?
 
 ## THINGS TO NOTICE
 
-(suggested things for the user to notice while running the model)
+Pay close attention to your stress over time. Does it shoot up and drop off? 
 
 ## THINGS TO TRY
 
-(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
+There are a number of factors that can affect your stress while thinking fast or slow. Try doing this in front of a socially-evaluative audience. Try thinking-slow a number of times and see what stress is for each run. Does it change with each run. Why do you think that is?
 
 ## EXTENDING THE MODEL
+
+Now that you have stress in netlogo, maybe try extending it to have stress influence your agent. This could be an interesting hubnet model where a group of people stress is shown.
+
+We could try using Soundx which allows for concurrent playing of sounds. 
+We could also integrate video through quick time to allow for different stress stimuli.
 
 (suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
 
@@ -232,7 +256,10 @@ The model
 
 ## CREDITS AND REFERENCES
 
-(a reference to the model's URL on the web if it has one, as well as any other necessary credits, citations, and links)
+http://www.media.mit.edu/galvactivator/index2.html for explaining the skin conductance response.
+
+http://iniastress.org/tssp for an explanation of the Trier Social Stress Procedure.
+
 @#$#@#$#@
 default
 true
