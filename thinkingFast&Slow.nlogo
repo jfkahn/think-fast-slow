@@ -9,6 +9,7 @@ globals [
   stress ; raw reading from input 1
   ]
 to setup
+  ca
   set increment-easy 0
   set increment-hard 0
   set count-correct 0
@@ -23,6 +24,8 @@ to think-fast
   ask-easy-question
   ; every second there is a beep and the time-left is updated.
   while [timer < 20] [
+      update-plots
+      set stress item 0 gogo:read-sensors
       every 1 [output-print time-left 20 beep]
       check-easy-answer
       ask turtles [rt random (stress / 1024) * 100 fd 3] ; TODO: Vary turtle movement using sensor value
@@ -36,6 +39,8 @@ to think-slow
   reset-timer
   ask-hard-question
   while [timer < 20] [
+    update-plots
+    set stress item 0 gogo:read-sensors
     every 1 [output-print time-left 20 beep]
     check-hard-answer
   ]
@@ -57,6 +62,7 @@ end
 ;;This just normalizes everything to that person's normal stress levels
 to calibrate
   set stress item 0 gogo:read-sensors
+  update-plots
 end
 
 to ask-easy-question
@@ -127,10 +133,10 @@ EXPLORE DIFFERENT TYPES OF THINKING
 1
 
 BUTTON
-40
-201
-154
-234
+49
+166
+163
+199
 Fast Thinking
 think-fast
 NIL
@@ -144,10 +150,10 @@ NIL
 1
 
 BUTTON
-40
-257
-157
-290
+47
+222
+164
+255
 Slow Thinking
 think-slow
 NIL
@@ -174,7 +180,7 @@ NIL
 10.0
 true
 false
-"set-plot-pen-mode 1" ""
+"set-plot-pen-mode 1\nset-plot-pen-interval 10" ""
 PENS
 "default" 1.0 0 -16777216 true "" "plot stress"
 
@@ -226,7 +232,7 @@ INPUTBOX
 136
 373
 prompt
-What is 29+49?
+What is 30+27?
 1
 0
 String
@@ -237,7 +243,7 @@ INPUTBOX
 257
 372
 answer
-20
+57
 1
 0
 Number
