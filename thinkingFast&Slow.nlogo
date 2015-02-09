@@ -13,7 +13,8 @@ to setup
   set increment-easy 0
   set increment-hard 0
   set count-correct 0
-  crt 100
+  crt 1
+  ask turtles [set shape "circle" set color green]
   set stress item 0 gogo:read-sensors
 end
 
@@ -23,12 +24,15 @@ to think-fast
   reset-timer
   ask-easy-question
   ; every second there is a beep and the time-left is updated.
-  while [timer < 20] [
+  while [timer <= 20] [
       update-plots
+      ask turtles [
+        set color scale-color red stress 400 0
+        set size .5 * stress / 2 ; set size of turtle according to stress scaled by two to make the size reasonable
+        ] ;
       set stress item 0 gogo:read-sensors
       every 1 [output-print time-left 20 beep]
       check-easy-answer
-      ask turtles [rt random (stress / 1024) * 100 fd 3] ; TODO: Vary turtle movement using sensor value
   ]
   print "ALL DONE WITH THINKING FAST. NOW TRY SLOW!"
 end
@@ -38,9 +42,13 @@ to think-slow
   setup
   reset-timer
   ask-hard-question
-  while [timer < 20] [
+  while [timer <= 20] [
     update-plots
     set stress item 0 gogo:read-sensors
+    ask turtles [
+      set color scale-color red stress 400 0
+      set size .5 * stress / 2 ; set size of turtle according to stress scaled by two to make the size reasonable
+      ] 
     every 1 [output-print time-left 20 beep]
     check-hard-answer
   ]
@@ -59,9 +67,10 @@ end
   
 
 
-;;This just normalizes everything to that person's normal stress levels
+;;We should add a calibration option that normalizes the stress value
 to calibrate
   set stress item 0 gogo:read-sensors
+  crt 1
   update-plots
 end
 
@@ -167,24 +176,6 @@ NIL
 1
 
 PLOT
-344
-59
-680
-330
-Current Stress
-NIL
-NIL
-0.0
-10.0
-0.0
-10.0
-true
-false
-"set-plot-pen-mode 1\nset-plot-pen-interval 10" ""
-PENS
-"default" 1.0 0 -16777216 true "" "plot stress"
-
-PLOT
 7
 390
 676
@@ -227,12 +218,12 @@ OUTPUT
 30
 
 INPUTBOX
-10
-313
-136
-373
+12
+309
+138
+369
 prompt
-What is 30+27?
+What is 24+37?
 1
 0
 String
@@ -243,7 +234,7 @@ INPUTBOX
 257
 372
 answer
-57
+15
 1
 0
 Number
@@ -260,10 +251,10 @@ number-correct
 11
 
 MONITOR
-439
-337
-496
 382
+316
+439
+361
 NIL
 stress
 17
@@ -302,24 +293,29 @@ There are a number of factors that can affect your stress while thinking fast or
 
 Now that you have stress in netlogo, maybe try extending it to have stress influence your agent. This could be an interesting hubnet model where a group of people stress is shown.
 
-We could try using Soundx which allows for concurrent playing of sounds. 
-We could also integrate video through quick time to allow for different stress stimuli.
+Try using Soundx extension to play different sounds instead of the netlogo beep.
+
+You could also try integrating different stress stimuli to see how you respond. For example, integrate video through quick time.
+
+You could take the model in a more statistical direction and perform some basic descriptive statistics after each run. You could even try running formal statistical hypothesis tests by connecting the model to R.
+
 
 (suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
 
 ## NETLOGO FEATURES
 
-(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
+
 
 ## RELATED MODELS
 
-(models in the NetLogo Models Library and elsewhere which are of related interest)
 
 ## CREDITS AND REFERENCES
 
 http://www.media.mit.edu/galvactivator/index2.html for explaining the skin conductance response.
 
 http://iniastress.org/tssp for an explanation of the Trier Social Stress Procedure.
+
+GSR Paper
 @#$#@#$#@
 default
 true
