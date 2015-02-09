@@ -15,25 +15,44 @@
 ;end
 globals [
   increment-easy ;how many times easy number has been called
+  increment-hard ;how many times hard number has been called
+  random1 ;first random number
+  random2 ;second random number
+  count-correct ;number of correct responses
   ]
 to setup
   set increment-easy 0
+  set increment-hard 0
+  set count-correct 0
+  crt 100
+
 end
 
 ;not sure how to get user input while still maintaining the clock beeps
 to think-fast
   setup
   reset-timer
+  ask-easy-question
   ; every second there is a beep and the time-left is updated.
   while [timer < 20] [
       every 1 [output-print time-left 20 beep]
-      ask-easy-question
+      check-easy-answer
+      ask turtles [rt random 60 fd 3] ; TODO: Vary turtle movement using sensor value
   ]
-  print "ALL DONE WITH THINKING SLOW. NOW TRY FAST!"
+  print "ALL DONE WITH THINKING FAST. NOW TRY SLOW!"
 end
 
 
-
+to think-slow
+  setup
+  reset-timer
+  ask-hard-question
+  while [timer < 20] [
+    every 1 [output-print time-left 20 beep]
+    check-hard-answer
+  ]
+  print "ALL DONE WITH THINKING SLOW. NOW TRY FAST!"
+end
 
 
 
@@ -57,12 +76,32 @@ end
 
 to ask-easy-question
   set increment-easy increment-easy + 1
-  let answer read-from-string user-input (word "What is " 1 "+ " easy-number) ;sets answer local variable to a number that the user input
-  ifelse answer =  1 + easy-number [show "CORRECT"] [show "INCORRECT"]
+  set random1 random 9
+  set random2 random 9
+  set prompt (word "What is " random1 "+" random2 "?")
+end
+
+to check-easy-answer
+  if ((random1 + random2) = answer) [ask-easy-question set count-correct count-correct + 1]
 end
 
 to-report easy-number
   report 1 + increment-easy
+end
+
+to-report number-correct
+  report count-correct
+end
+
+to ask-hard-question
+  set increment-hard increment-hard + 1
+  set random1 (random 20) + 12
+  set random2 (random 30) + 23
+  set prompt (word "What is " random1 "+" random2 "?")
+end
+
+to check-hard-answer
+ if ((random1 + random2) = answer) [ask-hard-question set count-correct count-correct + 1]
 end
 
 ;to ask-hard-question
@@ -72,6 +111,7 @@ end
 ;end
 
 to-report hard-number
+  
 end
 
 
@@ -79,13 +119,13 @@ to start-over
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-558
-10
-803
-214
-16
-16
-5.242424242424242
+693
+17
+1243
+546
+25
+23
+10.6
 1
 10
 1
@@ -95,10 +135,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--16
-16
--16
-16
+-25
+25
+-23
+23
 0
 0
 1
@@ -106,10 +146,10 @@ ticks
 30.0
 
 TEXTBOX
-45
-20
-450
-44
+41
+18
+446
+42
 EXPLORE DIFFERENT TYPES OF THINKING
 20
 0.0
@@ -209,6 +249,39 @@ OUTPUT
 168
 30
 
+INPUTBOX
+10
+313
+136
+373
+prompt
+What is 3+2?
+1
+0
+String
+
+INPUTBOX
+141
+312
+257
+372
+answer
+60
+1
+0
+Number
+
+MONITOR
+265
+314
+337
+359
+# Correct
+number-correct
+0
+1
+11
+
 @#$#@#$#@
 ## WHAT IS IT?
 Thinking Fast and Slow is trying to give an experiential way to expereince two different modes of thinking: Fast thinking and Slow Thinking. Fast and Slow thinking is based off of the popularization of two systems of thinking popularized by Daniel Kahneman in his book "Thinking Fast and Slow".
@@ -259,7 +332,6 @@ We could also integrate video through quick time to allow for different stress s
 http://www.media.mit.edu/galvactivator/index2.html for explaining the skin conductance response.
 
 http://iniastress.org/tssp for an explanation of the Trier Social Stress Procedure.
-
 @#$#@#$#@
 default
 true
